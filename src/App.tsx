@@ -18,6 +18,47 @@ const BOROUGH_LABELS: Record<string, string> = {
 
 const normalizeBorough = (value: string) => BOROUGH_LABELS[value] || value
 
+const BOROUGH_IMAGES: Record<string, string[]> = {
+  Manhattan: [
+    'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80',
+    'https://images.unsplash.com/photo-1496560544814-23451c93d1d2?auto=format&fit=crop&w=900&q=80',
+  ],
+  Brooklyn: [
+    'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=900&q=80',
+    'https://images.unsplash.com/photo-1454412685993-0f47fa10ecc2?auto=format&fit=crop&w=900&q=80',
+  ],
+  Queens: [
+    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80',
+    'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=80',
+  ],
+  Bronx: [
+    'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80',
+    'https://images.unsplash.com/photo-1504610926078-a1611febcad3?auto=format&fit=crop&w=900&q=80',
+  ],
+  'Staten Island': [
+    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80',
+    'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=900&q=80',
+  ],
+  Unknown: [
+    'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=900&q=80',
+  ],
+}
+
+const hashString = (value: string) => {
+  let hash = 0
+  for (let i = 0; i < value.length; i += 1) {
+    hash = (hash << 5) - hash + value.charCodeAt(i)
+    hash |= 0
+  }
+  return Math.abs(hash)
+}
+
+const pickImage = (borough: string, id: string) => {
+  const list = BOROUGH_IMAGES[borough] ?? BOROUGH_IMAGES.Unknown
+  const index = hashString(id) % list.length
+  return list[index]
+}
+
 const getInitialFilters = () => {
   const params = new URLSearchParams(window.location.search)
   const search = params.get('q') ?? ''
@@ -82,6 +123,7 @@ function App() {
             mapQuery: [park.name, park.address, normalizedBorough, 'NYC']
               .filter(Boolean)
               .join(', '),
+            imageUrl: pickImage(normalizedBorough, park.id),
           }
         })
         setResults(normalized)

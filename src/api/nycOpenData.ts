@@ -7,6 +7,7 @@ export type ParkRecord = {
   borough: string
   address: string
   mapQuery: string
+  imageUrl?: string
 }
 
 type FetchParams = {

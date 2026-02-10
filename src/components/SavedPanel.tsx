@@ -20,10 +20,17 @@ const SavedPanel = ({ saved, onRemove }: SavedPanelProps) => {
         <ul className="saved-list">
           {saved.map((park) => (
             <li key={park.id} className="saved-item">
-              <div>
+              <div className="saved-content">
+                {park.imageUrl ? (
+                  <div className="saved-thumb">
+                    <img src={park.imageUrl} alt={park.name} loading="lazy" />
+                  </div>
+                ) : null}
+                <div>
                 <h4>{park.name}</h4>
                 <p className="meta">{park.borough}</p>
                 <p className="address">{park.address}</p>
+                </div>
               </div>
               <button
                 className="button button-link"

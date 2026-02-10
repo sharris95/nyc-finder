@@ -13,6 +13,11 @@ const ResultCard = ({ park, isSaved, onToggleSave }: ResultCardProps) => {
 
   return (
     <article className="card">
+      {park.imageUrl ? (
+        <div className="card-media">
+          <img src={park.imageUrl} alt={park.name} loading="lazy" />
+        </div>
+      ) : null}
       <div className="card-content">
         <h3>{park.name}</h3>
         <p className="meta">{park.borough}</p>
